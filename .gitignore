@@ -1,0 +1,6 @@
+# dirs
+venv/
+
+# vim backups
+*~
+

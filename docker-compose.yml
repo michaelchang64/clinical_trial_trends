@@ -1,0 +1,48 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: clinical_trials
+      MYSQL_USER: my_user
+      MYSQL_PASSWORD: an*2hSDn5
+      MYSQL_INITDB_SKIP_TZINFO: 1
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  app:
+    build: .
+    container_name: python_app
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: my_user
+      DB_PASSWORD: an*2hSDn5
+      DB_NAME: clinical_trials
+    volumes:
+      - .:/app
+    command: >
+      sh -c "cron && tail -f /var/log/cron.log"
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./fastapi-backend/Dockerfile
+    container_name: fastapi_app
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: my_user
+      DB_PASSWORD: an*2hSDn5
+      DB_NAME: clinical_trials
+    ports:
+      - "8000:8000"
+
+volumes:
+  db_data:
