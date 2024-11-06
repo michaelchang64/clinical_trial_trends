@@ -1,5 +1,8 @@
 # dirs
 venv/
+raw_csvs/*
+__pycache__/
+node_modules/
 
 # vim backups
 *~

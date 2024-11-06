@@ -8,14 +8,14 @@ interface TotalTrialsProps {
 
 const TotalTrials: React.FC<TotalTrialsProps> = ({ clinicalTrialsGov, eudraCT }) => {
   return (
-    <Box display="flex" justifyContent="space-around" p={2}>
+    <Box className="bg-gray-800 p-4 rounded-lg shadow-md mb-4 flex justify-around">
       <Box textAlign="center">
-        <Typography variant="h6">ClinicalTrials.gov</Typography>
-        <Typography variant="h4">{clinicalTrialsGov}</Typography>
+        <Typography variant="h6" className="text-white">ClinicalTrials.gov</Typography>
+        <Typography variant="h4" className="text-white">{clinicalTrialsGov}</Typography>
       </Box>
       <Box textAlign="center">
-        <Typography variant="h6">EudraCT</Typography>
-        <Typography variant="h4">{eudraCT}</Typography>
+        <Typography variant="h6" className="text-white">EudraCT</Typography>
+        <Typography variant="h4" className="text-white">{eudraCT}</Typography>
       </Box>
     </Box>
   );

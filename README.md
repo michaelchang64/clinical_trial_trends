@@ -32,6 +32,16 @@ The backend is dockerized and consists of a Python application and a MySQL datab
 
    - You should see both the `python_app` and `mysql_db` containers running.
 
+### Step 2: Run initial scrape run
+
+1. Use the general scraper run command now that the container is built and loaded:
+
+   ```bash
+   docker exec -it python_app python /app/run_scrapers.py
+   ```
+
+2. 
+
 ### Step 2: Access the Backend
 
 - The backend API should be accessible at `http://localhost:8000` (or the port specified in your Docker setup).

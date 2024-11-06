@@ -66,28 +66,55 @@ def insert_eu_data(file_path):
                 ON DUPLICATE KEY UPDATE
                 study_name=VALUES(study_name), conditions=VALUES(conditions), sponsor=VALUES(sponsor), start_date=VALUES(start_date)
             ''', (
-                row['EudraCT Number'], row['Full Title'], row['Medical Condition'], row['Sponsor Name'], start_date
+                row['EudraCT Number'], row['Full Title'], row['Diseases'] if row['Diseases'] else row['Medical Condition'], row['Sponsor Name'], start_date
             ))
     conn.commit()
 
-# Function to update the combined_trials table
-def update_combined_trials():
-    # Clear the existing data in combined_trials
+# Function to update the combined_trials and conditions tables
+def update_combined_trials_and_conditions():
+    # Clear the existing data in combined_trials and conditions
+    cursor.execute('DELETE FROM transformed.conditions')
     cursor.execute('DELETE FROM transformed.combined_trials')
 
     # Insert data from raw.us into transformed.combined_trials
     cursor.execute('''
-        INSERT INTO transformed.combined_trials (study_identifier, study_name, conditions, sponsor, start_date, created_at, source)
-        SELECT study_identifier, study_name, conditions, sponsor, start_date, created_at, 'ClinicalTrials.gov' AS source
+        INSERT INTO transformed.combined_trials (study_identifier, study_name, sponsor, start_date, created_at, source)
+        SELECT study_identifier, study_name, sponsor, start_date, created_at, 'ClinicalTrials.gov' AS source
         FROM raw.us
     ''')
 
     # Insert data from raw.eu into transformed.combined_trials
     cursor.execute('''
-        INSERT INTO transformed.combined_trials (study_identifier, study_name, conditions, sponsor, start_date, created_at, source)
-        SELECT study_identifier, study_name, conditions, sponsor, start_date, created_at, 'EudraCT' AS source
+        INSERT INTO transformed.combined_trials (study_identifier, study_name, sponsor, start_date, created_at, source)
+        SELECT study_identifier, study_name, sponsor, start_date, created_at, 'EudraCT' AS source
         FROM raw.eu
     ''')
+
+    # Fetch all trials from combined_trials
+    cursor.execute('SELECT id, study_identifier FROM transformed.combined_trials')
+    trials = cursor.fetchall()
+
+    # Insert conditions into the transformed.conditions table
+    for trial_id, study_identifier in trials:
+        # Fetch conditions from raw.us
+        cursor.execute('SELECT conditions FROM raw.us WHERE study_identifier = %s', (study_identifier,))
+        us_conditions = cursor.fetchone()
+        if us_conditions and us_conditions[0]:
+            for condition in us_conditions[0].split('|'):
+                cursor.execute('''
+                    INSERT INTO transformed.conditions (trial_id, condition_name)
+                    VALUES (%s, %s)
+                ''', (trial_id, condition.strip()))
+
+        # Fetch conditions from raw.eu
+        cursor.execute('SELECT conditions FROM raw.eu WHERE study_identifier = %s', (study_identifier,))
+        eu_conditions = cursor.fetchone()
+        if eu_conditions and eu_conditions[0]:
+            for condition in eu_conditions[0].split('|'):
+                cursor.execute('''
+                    INSERT INTO transformed.conditions (trial_id, condition_name)
+                    VALUES (%s, %s)
+                ''', (trial_id, condition.strip()))
 
     conn.commit()
 
@@ -111,8 +138,8 @@ def data_ingest():
     else:
         print(f"File not found: {eu_file_path}")
 
-    # Update the combined_trials table after data ingestion
-    update_combined_trials()
+    # Update the combined_trials and conditions tables after data ingestion
+    update_combined_trials_and_conditions()
 
     cursor.close()
     conn.close()

@@ -1,4 +1,3 @@
-
 -- Switch to the clinical_trials database
 USE clinical_trials;
 
@@ -35,21 +34,25 @@ CREATE TABLE IF NOT EXISTS transformed.combined_trials (
   id INT AUTO_INCREMENT PRIMARY KEY,
   study_identifier VARCHAR(255),
   study_name VARCHAR(900),
-  conditions TEXT,
   sponsor VARCHAR(500),
   start_date DATE,
   created_at TIMESTAMP,
   source VARCHAR(50)
 );
 
--- Grant INSERT and UPDATE privileges on the `us` table
+-- Create a conditions table within the transformed schema
+CREATE TABLE IF NOT EXISTS transformed.conditions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  trial_id INT,
+  condition_name VARCHAR(650),
+  FOREIGN KEY (trial_id) REFERENCES transformed.combined_trials(id)
+);
+
+-- Grant privileges
 GRANT SELECT, INSERT, UPDATE, DELETE ON raw.us TO 'my_user'@'%';
-
--- Grant INSERT and UPDATE privileges on the `eu` table
 GRANT SELECT, INSERT, UPDATE, DELETE ON raw.eu TO 'my_user'@'%';
-
--- Grant INSERT and UPDATE privileges on the `combined_trials` table
 GRANT SELECT, INSERT, UPDATE, DELETE ON transformed.combined_trials TO 'my_user'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE ON transformed.conditions TO 'my_user'@'%';
 
 -- Apply the changes
 FLUSH PRIVILEGES;

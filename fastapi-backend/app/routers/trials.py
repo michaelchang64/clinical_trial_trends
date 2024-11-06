@@ -1,4 +1,3 @@
-import mysql.connector
 from fastapi import APIRouter, HTTPException
 from app.database import get_db_connection
 
@@ -65,9 +64,10 @@ async def get_conditions_breakdown():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         query = """
-            SELECT conditions AS name, COUNT(*) AS value
-            FROM transformed.combined_trials
-            GROUP BY conditions
+            SELECT condition_name AS name, COUNT(*) AS value
+            FROM transformed.conditions
+            GROUP BY condition_name
+            ORDER BY value DESC
         """
         cursor.execute(query)
         results = cursor.fetchall()

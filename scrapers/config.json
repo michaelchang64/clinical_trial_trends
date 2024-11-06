@@ -1,6 +1,6 @@
 {
   "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.110 Safari/537.36",
-  "ct_us_max_pages": 3,
+  "ct_us_max_pages": 10,
   "download_all": false,
   "retries": 3,
   "ct_eu_max_pages": 3 
