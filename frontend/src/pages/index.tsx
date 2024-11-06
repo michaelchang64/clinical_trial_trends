@@ -3,6 +3,7 @@ import { Container, Typography } from '@mui/material';
 import TotalTrials from '../components/TotalTrials';
 import ConditionsPieChart from '../components/ConditionsPieChart';
 import SponsorsBarChart from '../components/SponsorsBarChart';
+import { fetchTotalTrials, fetchConditionsData, fetchSponsorsData } from '../api';
 
 const Dashboard: React.FC = () => {
   const [totalTrials, setTotalTrials] = useState({ clinicalTrialsGov: 0, eudraCT: 0 });
@@ -10,24 +11,26 @@ const Dashboard: React.FC = () => {
   const [sponsorsData, setSponsorsData] = useState([]);
 
   useEffect(() => {
-    // Fetch total trials data
-    fetch('/api/totalTrials')
-      .then(response => response.json())
-      .then(data => setTotalTrials(data));
+    const fetchData = async () => {
+      try {
+        const totalTrialsData = await fetchTotalTrials();
+        setTotalTrials(totalTrialsData);
 
-    // Fetch conditions data
-    fetch('/api/conditions')
-      .then(response => response.json())
-      .then(data => setConditionsData(data));
+        const conditions = await fetchConditionsData();
+        setConditionsData(conditions);
 
-    // Fetch sponsors data
-    fetch('/api/sponsors')
-      .then(response => response.json())
-      .then(data => setSponsorsData(data));
+        const sponsors = await fetchSponsorsData();
+        setSponsorsData(sponsors);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
-    <Container>
+    <Container className="dark:bg-gray-900 dark:text-white">
       <Typography variant="h3" gutterBottom>
         Clinical Trials Dashboard
       </Typography>

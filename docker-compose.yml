@@ -31,8 +31,8 @@ services:
 
   fastapi:
     build:
-      context: .
-      dockerfile: ./fastapi-backend/Dockerfile
+      context: ./fastapi-backend
+      dockerfile: Dockerfile
     container_name: fastapi_app
     depends_on:
       - db

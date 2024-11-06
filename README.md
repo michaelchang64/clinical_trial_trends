@@ -1,75 +1,85 @@
-# Clinical Trial Trends
+# Clinical Trials Dashboard
 
-This project contains scrapers for extracting data from clinical trial registries. The scrapers are designed to run on a schedule and are containerized using Docker.
+This project consists of a backend service that scrapes clinical trials data and stores it in a MySQL database, and a frontend application built with Next.js and TypeScript to visualize the data.
 
-## Installation and Setup
+## Prerequisites
 
-### Prerequisites
+- **Docker**: Ensure Docker is installed and running on your machine.
+- **Node.js**: Ensure Node.js (and npm) is installed for running the frontend locally.
 
-- Docker
-- Python 3.10
-- Playwright
+## Backend Setup
 
-### Project Structure
+The backend is dockerized and consists of a Python application and a MySQL database.
 
-```
-clinical_trial_trends/
-│
-├── raw_csvs/
-├── scrapers/
-│   ├── clinicaltrials_eu_scraper.py
-│   └── clinicaltrials_gov_scraper.py
-│   └── config.json
-├── Dockerfile
-├── requirements.txt
-└── crontab
-```
+### Step 1: Build and Run the Docker Containers
 
-### Setup
-
-1. **Clone the Repository**
+1. **Build and start the containers**:
 
    ```bash
-   git clone https://github.com/michaelchang64/clinical_trial_trends.git
-   cd clinical_trial_trends
+   docker-compose up --build -d
    ```
 
-2. **Install Dependencies**
+   - This command will build the Docker images and start the containers for both the Python application and the MySQL database.
+   - The MySQL database will be initialized with the `init.sql` script.
 
-   Ensure you have the required Python packages listed in `requirements.txt`.
+2. **Verify the containers are running**:
+
+   - Use the following command to check the status of the containers:
+
+     ```bash
+     docker-compose ps
+     ```
+
+   - You should see both the `python_app` and `mysql_db` containers running.
+
+### Step 2: Access the Backend
+
+- The backend API should be accessible at `http://localhost:8000` (or the port specified in your Docker setup).
+
+## Frontend Setup
+
+The frontend is built with Next.js and can be run locally.
+
+### Step 1: Install Dependencies
+
+1. **Navigate to the frontend directory**:
 
    ```bash
-   pip install -r requirements.txt
+   cd frontend
    ```
 
-3. **Configure Playwright**
-
-   Install Playwright and its dependencies:
+2. **Install the required packages**:
 
    ```bash
-   playwright install
+   npm install
    ```
 
-4. **Build the Docker Image**
+### Step 2: Run the Frontend Locally
 
-   Build the Docker image using the provided `Dockerfile`.
+1. **Start the development server**:
 
    ```bash
-   docker build -t clinical-trial-trends .
+   npm run dev
    ```
 
-5. **Run the Docker Container**
+   - This will start the Next.js development server on `http://localhost:3000`.
 
-   Run the container to start the scrapers on a schedule.
+2. **Access the Frontend**:
 
-   ```bash
-   docker run --rm clinical-trial-trends
-   ```
+   - Open your browser and navigate to `http://localhost:3000` to view the Clinical Trials Dashboard.
 
-### Configuration
+## Troubleshooting
 
-- **config.json**: Configure the number of pages to scrape and other settings.
+- **Docker Issues**: If you encounter issues with Docker, ensure Docker is running and that you have sufficient permissions.
+- **Network Errors**: If the frontend cannot connect to the backend, check CORS settings and ensure the backend is running.
+- **Database Connection**: Ensure the MySQL container is running and the credentials in your application match those in `docker-compose.yml`.
 
-### Scheduling
+## Additional Notes
 
-The scrapers are set to run every 12 hours using cron jobs within the Docker container. Logs are stored in `/var/log/cron.log`.
+- **Data Scraping**: The backend uses cron jobs to periodically scrape data and update the database. Ensure the cron jobs are correctly configured in the Dockerfile.
+- **Environment Variables**: Consider using environment variables for sensitive information like database credentials.
+
+## Future Improvements
+
+- **Dockerize Frontend**: Consider dockerizing the frontend for a consistent deployment environment.
+- **Security**: Implement security best practices, such as using a secrets management tool for sensitive data.
