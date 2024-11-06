@@ -11,6 +11,9 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  typography: {
+    fontFamily: 'Lato, sans-serif',
+  },
 });
 
 const App: React.FC = () => {
