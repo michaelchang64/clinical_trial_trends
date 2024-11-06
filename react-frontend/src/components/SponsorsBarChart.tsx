@@ -16,7 +16,7 @@ const SponsorsBarChart: React.FC<SponsorsBarChartProps> = ({ data }) => {
         <YAxis stroke="#ccc" />
         <Tooltip />
         <CartesianGrid strokeDasharray="3 3" />
-        <Legend verticalAlign="top" height={36}/>
+        {/* <Legend verticalAlign="top" height={36}/> */}
         <Bar dataKey="value">
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

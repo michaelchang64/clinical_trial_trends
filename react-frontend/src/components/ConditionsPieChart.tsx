@@ -5,14 +5,31 @@ interface ConditionsPieChartProps {
   data: { name: string; value: number }[];
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = [
+  '#0088FE', // Blue
+  '#00C49F', // Teal
+  '#FFBB28', // Yellow
+  '#FF8042', // Orange
+  '#A28CFF', // Lavender
+  '#FF6F91', // Pink
+  '#FF6347', // Tomato
+  '#32CD32', // Lime Green
+  '#FFD700', // Gold
+  '#8A2BE2', // Blue Violet
+  '#FF4500', // Orange Red
+  '#2E8B57', // Sea Green
+  '#DA70D6', // Orchid
+  '#4682B4', // Steel Blue
+  '#9ACD32', // Yellow Green
+  '#FF1493', // Deep Pink
+  '#7FFF00'  // Chartreuse
+];
 
 const ConditionsPieChart: React.FC<ConditionsPieChartProps> = ({ data }) => {
   return (
     <div className="bg-gray-800 p-4 rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold text-white mb-2">Conditions Distribution</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
+      <ResponsiveContainer width="100%" height={260}>
+        <PieChart width={900} >
           <Pie
             data={data}
             cx="50%"
@@ -28,7 +45,7 @@ const ConditionsPieChart: React.FC<ConditionsPieChartProps> = ({ data }) => {
             ))}
           </Pie>
           <Tooltip />
-          <Legend verticalAlign="top" height={36}/>
+          {/* <Legend verticalAlign="top" height={36}/> */}
         </PieChart>
       </ResponsiveContainer>
     </div>
