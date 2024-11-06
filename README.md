@@ -39,12 +39,20 @@ The backend is dockerized and consists of a Python application and a MySQL datab
    ```bash
    docker exec -it python_app python /app/run_scrapers.py
    ```
-
-2. 
+   This script will run the scrapers and then run data ingests to update data in the MySQL database.
 
 ### Step 2: Access the Backend
 
 - The backend API should be accessible at `http://localhost:8000` (or the port specified in your Docker setup).
+
+Endpoints:
+- **GET `/api/trials/top10`**: Retrieves the top 10 clinical trials from the database.
+
+- **GET `/api/trials/total`**: Returns the total number of trials from ClinicalTrials.gov and EudraCT.
+
+- **GET `/api/trials/sponsors`**: Provides a breakdown of trials by sponsor, ordered by the number of trials.
+
+- **GET `/api/trials/conditions`**: Offers a breakdown of trials by condition, ordered by the number of occurrences.
 
 ## Frontend Setup
 
@@ -55,7 +63,7 @@ The frontend is built with Next.js and can be run locally.
 1. **Navigate to the frontend directory**:
 
    ```bash
-   cd frontend
+   cd react-frontend
    ```
 
 2. **Install the required packages**:
@@ -69,7 +77,7 @@ The frontend is built with Next.js and can be run locally.
 1. **Start the development server**:
 
    ```bash
-   npm run dev
+   npm start
    ```
 
    - This will start the Next.js development server on `http://localhost:3000`.
@@ -91,5 +99,4 @@ The frontend is built with Next.js and can be run locally.
 
 ## Future Improvements
 
-- **Dockerize Frontend**: Consider dockerizing the frontend for a consistent deployment environment.
-- **Security**: Implement security best practices, such as using a secrets management tool for sensitive data.
+- **Dockerize Frontend**: Will try my hand at dockerizing the frontend for a consistent deployment environment, but it for now it seems to work well enough without being dockerized.
