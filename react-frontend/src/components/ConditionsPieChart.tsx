@@ -1,4 +1,5 @@
 import React from 'react';
+import CustomTooltip from './CustomTooltip';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface ConditionsPieChartProps {
@@ -44,8 +45,7 @@ const ConditionsPieChart: React.FC<ConditionsPieChartProps> = ({ data }) => {
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
-          {/* <Legend verticalAlign="top" height={36}/> */}
+          <Tooltip content={<CustomTooltip unit="trials" />} />
         </PieChart>
       </ResponsiveContainer>
     </div>

@@ -1,4 +1,4 @@
-# Clinical Trials Dashboard
+# Clinical Trial Trends Dashboard
 
 This project consists of a backend service that scrapes clinical trials data and stores it in a MySQL database, and a frontend application built with Next.js and TypeScript to visualize the data.
 
@@ -39,6 +39,7 @@ The backend is dockerized and consists of a Python application and a MySQL datab
    ```bash
    docker exec -it python_app python /app/run_scrapers.py
    ```
+
    This script will run the scrapers and then run data ingests to update data in the MySQL database.
 
 ### Step 2: Access the Backend
