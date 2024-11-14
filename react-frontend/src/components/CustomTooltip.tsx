@@ -1,5 +1,6 @@
 import React from "react";
 
+// define the props in props interface
 interface CustomTooltipProps {
   active?: boolean;
   payload?: { value: number }[];
